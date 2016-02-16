@@ -31,7 +31,7 @@ def cleanup(args):
             node_path = '{}/{}'.format(zk_path, node)
             data, stat = zk.get(node_path)
             last_modified = dt.fromtimestamp(stat.mtime/1000.0)
-            if (now - last_modified).days > args.age:
+            if ((now - last_modified).days > args.age) or (args.inclusive and (now - last_modified).days >= args.age):
                 if not args.dry_run:
                     # Kazoo does not support recursive async deletes
                     if stat.children_count == 0:
@@ -50,6 +50,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Taskflow znode cleanup.', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--dry-run', action='store_true', dest='dry_run',
             default=False, help='Dry run only, will not delete znodes.')
+    parser.add_argument('--inclusive', action='store_true', dest='inclusive',
+            default=False, help='Delete znodes falling on the age boundary.')
     parser.add_argument('--age', action='store', dest='age',
             default=DEFAULTS['age'], type=int, help='Delete znodes older than X days')
     parser.add_argument('--server', action='store', dest='server',
