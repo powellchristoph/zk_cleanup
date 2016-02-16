@@ -1,4 +1,4 @@
-#!/srv/poppy/bin/python
+#!/usr/bin/env python
 
 import argparse
 import logging
@@ -59,6 +59,6 @@ if __name__ == '__main__':
     parser.add_argument('--zk-root-path', action='store', dest='zk_root_path',
             default=DEFAULTS['zk_root_path'], help='Taskflow\'s root path in Zookeeper.')
     parser.add_argument('--zk-paths', action='store', dest='zk_paths',
-            default=DEFAULTS['zk_paths'], help='The taskflow paths in zookeeper that will be searched.')
+            default=DEFAULTS['zk_paths'], nargs='+', help='The taskflow paths in zookeeper that will be searched.')
 
     cleanup(parser.parse_args())
